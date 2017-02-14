@@ -74,11 +74,9 @@ java -jar nvc.jar -i C:\ -o d:\ATARI -f -l 3 atr xfd xex
 search the complete "C" drive for files with "atr", "xfd" and "xex" suffixes and copy them to the "ATARI" directory on the "D" drive, while creating a directory structure with exactly 3 levels of subdirectories
 
 Remarks
+- copying files takes time - a progress bar will tell you how many files (in percent) are already copied
+- it makes no sense to specify the same directory as an input and as an output directory - you would end up in a mess, since the input files are not being deleted
+- the output directory "ATARI" (on the SD card) does not need to be completely empty - if you create directories there before starting NVC, then SIO2SD will show these directories at the top of the directory list (directories created later will be shown at the bottom of that list)
+- there are some files (for example "atr" images containing multiple games), which do not fit to the NVC concept, it makes sense to copy such files manually to a separate directory called for example "Collections"
 
-    copying files takes time - a progress bar will tell you how many files (in percent) are already copied
-    it makes no sense to specify the same directory as an input and as an output directory - you would end up in a mess, since the input files are not being deleted
-    the output directory "ATARI" (on the SD card) does not need to be completely empty - if you create directories there before starting NVC, then SIO2SD will show these directories at the top of the directory list (directories created later will be shown at the bottom of that list)
-    there are some files (for example "atr" images containing multiple games), which do not fit to the NVC concept, it makes sense to copy such files manually to a separate directory called for example "Collections"
-
-    you will find NVC source code in the nvc.jar file
     
