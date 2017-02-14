@@ -20,11 +20,10 @@ The NVC tool can be used as well to search for files that got lost somewhere. It
 
 NVC is written in JAVA. In order to run it, you will need a JAVA virtual machine.
 An installation is not required. After unzipping NVC.zip you will get:
-
-    nvc.jar - the NVC tool
-    nvc.txt - a short description (in english)
-    nvc.bat - an example script for starting NVC from a command line under Windows (has to be adapted)
-    nvc.sh - an example script for starting NVC from a terminal window under Linux (has to be adapted) 
+- nvc.jar - the NVC tool
+- nvc.txt - a short description (in english)
+- nvc.bat - an example script for starting NVC from a command line under Windows (has to be adapted)
+- nvc.sh - an example script for starting NVC from a terminal window under Linux (has to be adapted) 
 
 NVC Usage
 
@@ -33,16 +32,11 @@ Double click the nvc.jar file to start the tool. A new window will appear.
 If started first time, the tool shows default settings, otherwise it shows the last used settings.
 
 Settings description:
-
-    Input directory - this is where we are copying from - it can be any directory, or even an entire drive (for example C:\)
-
-    Output directory - the destination - it should be the "ATARI" directory on the SD card
-
-    Max output directory structure depth - this value has an influence on the number of directories created in the destination path for a given file. The bigger it is, the smaller is the number of files in the last directory, but also the path that we need to follow to a file is longer. The default value is 3. For bigger game collections you may try higher numbers, and for small collections you may try a value of 2.
-
-    Force directory creation at the specified depth - default is off. If we have a file with a unique beginning of the name (there is no other file, which name starts with the same letters), then we don't have to create directories for it. SIO2SD does not sort files and does not display directories at the front of the files (like PCs do). You may want to enable it if you use NVC to organize your games for usage with a PC (for example with AspeQt or with Atari800 Emulator).
-
-    Suffix list - NVC will copy only the files with suffixes specified here (lowercase / uppercase does not matter) 
+- Input directory - this is where we are copying from - it can be any directory, or even an entire drive (for example C:\)
+- Output directory - the destination - it should be the "ATARI" directory on the SD card
+- Max output directory structure depth - this value has an influence on the number of directories created in the destination path for a given file. The bigger it is, the smaller is the number of files in the last directory, but also the path that we need to follow to a file is longer. The default value is 3. For bigger game collections you may try higher numbers, and for small collections you may try a value of 2.
+- Force directory creation at the specified depth - default is off. If we have a file with a unique beginning of the name (there is no other file, which name starts with the same letters), then we don't have to create directories for it. SIO2SD does not sort files and does not display directories at the front of the files (like PCs do). You may want to enable it if you use NVC to organize your games for usage with a PC (for example with AspeQt or with Atari800 Emulator).
+- Suffix list - NVC will copy only the files with suffixes specified here (lowercase / uppercase does not matter) 
 
 Upon clicking on the Start button, the tool searches the Input directory (and all its subdirectories) for files matching given suffixes. It maintains a list containing search results, which is sorted alphabetically after the search is done. NVC follows that list to copy files to the Output directory.
 
@@ -61,15 +55,15 @@ java -jar nvc.jar -i INPUT -o OUTPUT [-f -l LEVEL] suffix1 [suffix2 ... suffixn]
 
 Examples:
 
-java -jar nvc.jar
+    java -jar nvc.jar
 
 performs the same action as double-clicking the nvc.jar (you may need it if double-clicking the nvc.jar does not work in your java environment)
 
-java -jar nvc.jar -i input_dir -o output_dir -l 2 atr
+    java -jar nvc.jar -i input_dir -o output_dir -l 2 atr
 
 search "input_dir" and its subdirectories for files matching "atr" suffix and copy them to "output_dir", while creating a directory structure with up to 2 levels of subdirectories
 
-java -jar nvc.jar -i C:\ -o d:\ATARI -f -l 3 atr xfd xex
+    java -jar nvc.jar -i C:\ -o d:\ATARI -f -l 3 atr xfd xex
 
 search the complete "C" drive for files with "atr", "xfd" and "xex" suffixes and copy them to the "ATARI" directory on the "D" drive, while creating a directory structure with exactly 3 levels of subdirectories
 
