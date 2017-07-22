@@ -46,10 +46,11 @@ NVC Usage from a command line
 
 NVC can be started alternatively from a command line.
 
-java -jar nvc.jar -i INPUT -o OUTPUT [-f -l LEVEL] suffix1 [suffix2 ... suffixn]
+java -jar nvc.jar -i INPUT -o OUTPUT [-f -l LEVEL -c CAPITALIZATION] suffix1 [suffix2 ... suffixn]
  -f        : force directory creation for files with unique names, default: false
  -i INPUT  : input directory
  -l DEPTH  : output directory depth, default: 3
+ -c CAPITALIZATION : output file name capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized
  -o OUTPUT : output directory
  suffix    : list of suffixes, example: atr com xex xfd
 

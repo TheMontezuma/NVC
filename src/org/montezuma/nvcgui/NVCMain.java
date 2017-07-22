@@ -10,7 +10,7 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 8;
+	final static int version = 9;
 	
 	NVCOptions op = new NVCOptions();
 	NVCGui gui;
@@ -54,12 +54,6 @@ public class NVCMain {
 		    try 
 		    {
 		        parser.parseArgument(args);
-			    List<String> tmp_suffixes = new ArrayList<String>();
-				for(String s:nvc.op.suffixes)
-				{
-					tmp_suffixes.add(s.toUpperCase());
-				}
-				nvc.op.suffixes = tmp_suffixes;
 			    if(!((new File(nvc.op.from)).isDirectory()))
 			    {
 			    	throw new CmdLineException(parser,nvc.op.from+" is not an existing directory!");
@@ -68,7 +62,7 @@ public class NVCMain {
 		    catch( CmdLineException e ) 
 		    {
 		        System.err.println(e.getMessage());
-		        System.err.println("java -jar nvc.jar -i INPUT [-o OUTPUT -l LEVEL -f] suffix1 [suffix2 ... suffixn]");
+		        System.err.println("java -jar nvc.jar -i INPUT [-o OUTPUT -l LEVEL -c CAPITALIZATION -f] suffix1 [suffix2 ... suffixn]");
 		        parser.printUsage(System.err);
 		        return;
 		    }
@@ -247,8 +241,22 @@ public class NVCMain {
 		if (!f.isDirectory()) {
 			String tmp = f.getName();
 			for (int i = 0; i < op.suffixes.size(); ++i) {
-				if (tmp.toUpperCase().endsWith(op.suffixes.get(i))) {
-					files.add(new NVCFileNamePair(f.getPath(), f.getName().toUpperCase()));
+				if (tmp.toUpperCase().endsWith(op.suffixes.get(i).toUpperCase())) {
+					switch(op.capitalization)
+					{
+					case 0: // none
+						files.add(new NVCFileNamePair(f.getPath(), f.getName()));
+						break;
+					case 1: // UPPER CASE
+						files.add(new NVCFileNamePair(f.getPath(), f.getName().toUpperCase()));
+						break;
+					case 2: // lower case
+						files.add(new NVCFileNamePair(f.getPath(), f.getName().toLowerCase()));
+						break;
+					case 3: // Capitalized
+						files.add(new NVCFileNamePair(f.getPath(), Character.toUpperCase(f.getName().charAt(0)) + f.getName().substring(1).toLowerCase()));
+						break;					
+					}
 					break;
 				}
 			}

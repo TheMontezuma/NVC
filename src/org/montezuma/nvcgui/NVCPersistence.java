@@ -15,6 +15,7 @@ public class NVCPersistence {
 	private static final String FROM = "from";
 	private static final String TO = "to";
 	private static final String LEVEL = "level";
+	private static final String CAP = "capitalization";
 	private static final String FORCE = "force";
 	private static final String SUFFIXES = "suffixes";
 	
@@ -34,6 +35,7 @@ public class NVCPersistence {
 			op.from = prefs.get(FROM, op.from);
 			op.to = prefs.get(TO, op.to);
 			op.level = prefs.getInt(LEVEL, op.level);
+			op.capitalization = prefs.getInt(CAP, op.capitalization);
 			op.force = prefs.getBoolean(FORCE, op.force);
 			byte[] bytes = prefs.getByteArray(SUFFIXES, null);
 			if (bytes != null)
@@ -64,6 +66,7 @@ public class NVCPersistence {
 			prefs.put(FROM, op.from);
 			prefs.put(TO, op.to);
 			prefs.putInt(LEVEL, op.level);
+			prefs.putInt(CAP, op.capitalization);
 			prefs.putBoolean(FORCE, op.force);
 			try
 			{
