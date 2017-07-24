@@ -120,14 +120,14 @@ public class NVCGui implements	Runnable,
    		} } );
        
        output_directory_depth = new JComboBox<Integer>();
-       for(int i=1 ; i<=10 ; i++)
+       for(int i=0 ; i<=10 ; i++)
        {
     	   output_directory_depth.addItem(new Integer(i));
        }
-       output_directory_depth.setSelectedIndex(nvc.op.level-1);
+       output_directory_depth.setSelectedIndex(nvc.op.level);
        output_directory_depth.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			nvc.op.level = output_directory_depth.getSelectedIndex()+1; 
+			nvc.op.level = output_directory_depth.getSelectedIndex(); 
 		} } );
 
        file_name_capitalization = new JComboBox<String>();

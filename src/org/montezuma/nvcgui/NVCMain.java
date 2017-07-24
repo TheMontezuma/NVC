@@ -10,7 +10,7 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 9;
+	final static int version = 10;
 	
 	NVCOptions op = new NVCOptions();
 	NVCGui gui;
