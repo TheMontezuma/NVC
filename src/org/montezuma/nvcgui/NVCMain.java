@@ -10,7 +10,7 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 10;
+	final static int version = 11;
 	
 	NVCOptions op = new NVCOptions();
 	NVCGui gui;
@@ -119,7 +119,8 @@ public class NVCMain {
 					output_path.append("/#");
 				}
 				StringBuffer tmp = new StringBuffer();
-				final int max_val = Math.min(input_file_name.length() - 4, op.level);
+				final int last_index_of_dot = input_file_name.lastIndexOf('.');
+				final int max_val = Math.min(last_index_of_dot, op.level);
 				int i = 0;
 				while (i < max_val) {
 					do {
