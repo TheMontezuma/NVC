@@ -15,8 +15,8 @@ public class NVCOptions {
     @Option(name="-l",usage="output directory depth, example: 3", metaVar="DEPTH")
     public int level = 3;
 
-    @Option(name="-c",usage="capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized, example: 0", metaVar="CAP")
-    public int capitalization = 0;
+    @Option(name="-c",usage="capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized, example: 1", metaVar="CAP")
+    public int capitalization = 1;
     
     @Option(name="-f",usage="force directory creation for files with unique names")
     public boolean force = true;

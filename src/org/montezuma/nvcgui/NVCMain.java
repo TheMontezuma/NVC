@@ -10,7 +10,7 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 11;
+	final static int version = 12;
 	
 	NVCOptions op = new NVCOptions();
 	NVCGui gui;
@@ -105,8 +105,9 @@ public class NVCMain {
 				file_counter++;
 				NVCFileNamePair theFile = it.next();
 				String input_file_name = theFile.fileName;
-				if (last_char != input_file_name.charAt(0)) {
-					last_char = input_file_name.charAt(0);
+				
+				if (last_char != input_file_name.toUpperCase().charAt(0)) {
+					last_char = input_file_name.toUpperCase().charAt(0);
 					if(gui == null)
 					{
 						System.err.print(last_char); // progress tracking for command line
@@ -124,7 +125,7 @@ public class NVCMain {
 				int i = 0;
 				while (i < max_val) {
 					do {
-						tmp.append(input_file_name.charAt(i));
+						tmp.append(input_file_name.toUpperCase().charAt(i));
 						i++;
 					} while ((i < max_val) && hasUniqueNVC(tmp.toString()));
 					if(!(op.force) && isUnique(tmp.toString()))
@@ -256,7 +257,7 @@ public class NVCMain {
 						break;
 					case 3: // Capitalized
 						files.add(new NVCFileNamePair(f.getPath(), Character.toUpperCase(f.getName().charAt(0)) + f.getName().substring(1).toLowerCase()));
-						break;					
+						break;
 					}
 					break;
 				}
