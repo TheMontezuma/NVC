@@ -10,7 +10,9 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 12;
+	final static int version = 13;
+	byte[] BUFFER1 = new byte[0xFFFFF];
+	byte[] BUFFER2 = new byte[0xFFFFF];
 	
 	NVCOptions op = new NVCOptions();
 	NVCGui gui;
@@ -156,7 +158,29 @@ public class NVCMain {
 				
 				if(output_file.exists())
 				{
+					boolean create_file_with_NVCVER_suffix = false;
+					int dup_counter_index = dup_counter;
 					if( 0 != BinFileCompare(input_file, output_file) )
+					{
+						create_file_with_NVCVER_suffix = true;
+					}
+					while(dup_counter_index > 1)
+					{
+						int ind_tmp = input_file_name.lastIndexOf('.');
+						StringBuffer sb_tmp = new StringBuffer(output_file_path);
+						sb_tmp.append(input_file_name.substring(0,ind_tmp));
+						sb_tmp.append(" NVCVER");
+						sb_tmp.append(dup_counter_index);
+						sb_tmp.append(input_file_name.substring(ind_tmp));
+						output_file = new File( sb_tmp.toString() );
+						if( 0 == BinFileCompare(input_file, output_file) )
+						{
+							create_file_with_NVCVER_suffix = false;
+							break;
+						}
+						dup_counter_index--;
+					}
+					if(create_file_with_NVCVER_suffix)
 					{
 						int ind_tmp = input_file_name.lastIndexOf('.');
 						StringBuffer sb_tmp = new StringBuffer(output_file_path);
@@ -278,7 +302,8 @@ public class NVCMain {
 	private void BinFileCopy(File inputFile, File outputFile) throws Exception {
 		FileInputStream in = new FileInputStream(inputFile);
 		FileOutputStream out = new FileOutputStream(outputFile);
-		byte[] b = new byte[0xFFFF];
+		byte[] b = BUFFER1;
+		Arrays.fill(b, (byte) 0);
 		int count;
 
 		while ((count = in.read(b)) != -1)
@@ -292,8 +317,11 @@ public class NVCMain {
 		int retval = 0;
 		FileInputStream fis1 = new FileInputStream(f1);
 		FileInputStream fis2 = new FileInputStream(f2);
-		byte[] b1 = new byte[0xFFFF];
-		byte[] b2 = new byte[0xFFFF];
+		byte[] b1 = BUFFER1;
+		byte[] b2 = BUFFER2;
+		Arrays.fill(b1, (byte) 0);
+		Arrays.fill(b2, (byte) 0);
+		
 		int count1;
 		int count2;
 		do
