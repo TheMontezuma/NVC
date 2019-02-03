@@ -254,7 +254,7 @@ public class NVCGui implements	Runnable,
        suffix_list.setText(sb.toString());
        panel6.add(suffix_list);
        panel7.add(start);
-       panel8.add(new JLabel("Ver." + NVCMain.version + "   Montezuma 2011-2018"));
+       panel8.add(new JLabel("Ver." + NVCMain.version + "   Montezuma 2011-2019"));
        
        frame.add(panel1);
        frame.add(panel2);

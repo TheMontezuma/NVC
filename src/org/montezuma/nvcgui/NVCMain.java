@@ -10,7 +10,9 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 12;
+	final static int version = 13;
+	byte[] BUFFER1 = new byte[0xFFFFF];
+	byte[] BUFFER2 = new byte[0xFFFFF];
 	
 	NVCOptions op = new NVCOptions();
 	NVCGui gui;
@@ -278,7 +280,8 @@ public class NVCMain {
 	private void BinFileCopy(File inputFile, File outputFile) throws Exception {
 		FileInputStream in = new FileInputStream(inputFile);
 		FileOutputStream out = new FileOutputStream(outputFile);
-		byte[] b = new byte[0xFFFF];
+		byte[] b = BUFFER1;
+		Arrays.fill(b, (byte) 0);
 		int count;
 
 		while ((count = in.read(b)) != -1)
@@ -292,8 +295,11 @@ public class NVCMain {
 		int retval = 0;
 		FileInputStream fis1 = new FileInputStream(f1);
 		FileInputStream fis2 = new FileInputStream(f2);
-		byte[] b1 = new byte[0xFFFF];
-		byte[] b2 = new byte[0xFFFF];
+		byte[] b1 = BUFFER1;
+		byte[] b2 = BUFFER2;
+		Arrays.fill(b1, (byte) 0);
+		Arrays.fill(b2, (byte) 0);
+		
 		int count1;
 		int count2;
 		do
