@@ -18,17 +18,19 @@ public class NVCGui implements	Runnable,
 {
 
 	private JFrame frame;
-	private JPanel panel1;
-	private JPanel panel2;
-	private JPanel panel3a;
-	private JPanel panel3b;
-	private JPanel panel4;
-	private JPanel panel5;
-	private JPanel panel6;
-	private JPanel panel7;
-	private JPanel panel8;
+	private JPanel panelInDir;
+	private JPanel panelOutDir;
+	private JPanel panelFileCount;
+	private JPanel panelDirDepth;
+	private JPanel panelCapitalization;
+	private JPanel panelForceDir;
+	private JPanel panelNewSuffix;
+	private JPanel panelSuffixes;
+	private JPanel panelStart;
+	private JPanel panelNVCVersion;
 	private JTextField input_directory_name;
 	private JTextField output_directory_name;
+	private JTextField output_directory_file_count;
 	private JComboBox<Integer> output_directory_depth;
 	private JComboBox<String> file_name_capitalization;
 	private JTextField suffix;
@@ -62,15 +64,16 @@ public class NVCGui implements	Runnable,
        frame.addWindowListener(new NVCWindowListener());
        frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.PAGE_AXIS));
        
-       panel1 = new JPanel();
-       panel2 = new JPanel();
-       panel3a = new JPanel();
-       panel3b = new JPanel();
-       panel4 = new JPanel();
-       panel5 = new JPanel();
-       panel6 = new JPanel();
-       panel7 = new JPanel();
-       panel8 = new JPanel();
+       panelInDir = new JPanel();
+       panelOutDir = new JPanel();
+       panelFileCount = new JPanel();
+       panelDirDepth = new JPanel();
+       panelCapitalization = new JPanel();
+       panelForceDir = new JPanel();
+       panelNewSuffix = new JPanel();
+       panelSuffixes = new JPanel();
+       panelStart = new JPanel();
+       panelNVCVersion = new JPanel();
        
        input_directory_name = new JTextField(nvc.op.from, 30);
        input_directory_name.addFocusListener(new FocusListener() {
@@ -129,12 +132,32 @@ public class NVCGui implements	Runnable,
 		public void actionPerformed(ActionEvent e) {
 			nvc.op.level = output_directory_depth.getSelectedIndex(); 
 		} } );
-
+       
+       output_directory_file_count = new JTextField(String.valueOf(nvc.op.filecount),4);
+       output_directory_file_count.setHorizontalAlignment(JTextField.TRAILING);
+       output_directory_file_count.addFocusListener(new FocusListener() {
+   		public void focusLost(FocusEvent e) {
+   			String fcount = output_directory_file_count.getText().trim();
+   			if(!fcount.isEmpty())
+   			{
+   				try{
+   				nvc.op.filecount = Integer.parseInt(fcount);
+   				}
+   				catch(java.lang.NumberFormatException nfe)
+   				{
+   				}
+   			}
+   			output_directory_file_count.setText(String.valueOf(nvc.op.filecount));
+   		}
+   		public void focusGained(FocusEvent e) {
+   		} } );
+       
        file_name_capitalization = new JComboBox<String>();
        file_name_capitalization.addItem("none");
        file_name_capitalization.addItem("UPPER CASE");
        file_name_capitalization.addItem("lower case");
        file_name_capitalization.addItem("Capitalized");
+       file_name_capitalization.addItem("Like In A Title");
        file_name_capitalization.setSelectedIndex(nvc.op.capitalization);
        file_name_capitalization.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -142,7 +165,7 @@ public class NVCGui implements	Runnable,
 		} } );
 
        
-       force = new JCheckBox("Force directory creation at the specified depth", nvc.op.force);
+       force = new JCheckBox("Force directory creation for files with unique names", nvc.op.force);
        force.addItemListener(new ItemListener() {
 		public void itemStateChanged(ItemEvent e) {
 			nvc.op.force = (ItemEvent.SELECTED == e.getStateChange());
@@ -220,31 +243,36 @@ public class NVCGui implements	Runnable,
       			}
      		} } );
        
-       ((FlowLayout)panel1.getLayout()).setAlignment(FlowLayout.TRAILING);
-       ((FlowLayout)panel2.getLayout()).setAlignment(FlowLayout.TRAILING);
-       ((FlowLayout)panel3a.getLayout()).setAlignment(FlowLayout.TRAILING);
-       ((FlowLayout)panel3b.getLayout()).setAlignment(FlowLayout.TRAILING);
-       ((FlowLayout)panel4.getLayout()).setAlignment(FlowLayout.TRAILING);
-       ((FlowLayout)panel5.getLayout()).setAlignment(FlowLayout.TRAILING);
-       ((FlowLayout)panel6.getLayout()).setAlignment(FlowLayout.LEADING);
-       ((FlowLayout)panel8.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelInDir.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelOutDir.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelFileCount.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelDirDepth.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelCapitalization.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelForceDir.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelNewSuffix.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelSuffixes.getLayout()).setAlignment(FlowLayout.LEADING);
+       ((FlowLayout)panelNVCVersion.getLayout()).setAlignment(FlowLayout.TRAILING);
        
-       panel1.add(new JLabel("Input directory:"));
-       panel1.add(input_directory_name);
-       panel1.add(browse_for_input_directory);
-       panel2.add(new JLabel("Output directory:"));
-       panel2.add(output_directory_name);
-       panel2.add(browse_for_output_directory);
-       panel3a.add(new JLabel("Max output directory structure depth:"));
-       panel3a.add(output_directory_depth);
-       panel3b.add(new JLabel("Output file names capitalization:"));
-       panel3b.add(file_name_capitalization);
-       panel4.add(force);
-       panel5.add(new JLabel("New Suffix: "));
-       panel5.add(suffix);
-       panel5.add(add_new_suffix);
-       panel5.add(reset_suffix_list);
-       panel6.add(new JLabel("Suffix list: "));
+       panelInDir.add(new JLabel("Input directory:"));
+       panelInDir.add(input_directory_name);
+       panelInDir.add(browse_for_input_directory);
+       panelOutDir.add(new JLabel("Output directory:"));
+       panelOutDir.add(output_directory_name);
+       panelOutDir.add(browse_for_output_directory);
+
+       panelFileCount.add(new JLabel("Preferred number of files in output directories (0 = no limit):"));
+       panelFileCount.add(output_directory_file_count);
+            
+       panelDirDepth.add(new JLabel("Preferred output directory structure depth:"));
+       panelDirDepth.add(output_directory_depth);
+       panelCapitalization.add(new JLabel("Output file names capitalization:"));
+       panelCapitalization.add(file_name_capitalization);
+       panelForceDir.add(force);
+       panelNewSuffix.add(new JLabel("New Suffix: "));
+       panelNewSuffix.add(suffix);
+       panelNewSuffix.add(add_new_suffix);
+       panelNewSuffix.add(reset_suffix_list);
+       panelSuffixes.add(new JLabel("Suffix list: "));
        StringBuffer sb = new StringBuffer();
        for(String s:nvc.op.suffixes)
        {
@@ -252,19 +280,20 @@ public class NVCGui implements	Runnable,
     	   sb.append(" ");
        }
        suffix_list.setText(sb.toString());
-       panel6.add(suffix_list);
-       panel7.add(start);
-       panel8.add(new JLabel("Ver." + NVCMain.version + "   Montezuma 2011-2019"));
+       panelSuffixes.add(suffix_list);
+       panelStart.add(start);
+       panelNVCVersion.add(new JLabel("Ver." + NVCMain.version + "   Montezuma 2011-2019"));
        
-       frame.add(panel1);
-       frame.add(panel2);
-       frame.add(panel3a);
-       frame.add(panel3b);
-       frame.add(panel4);
-       frame.add(panel5);
-       frame.add(panel6);
-       frame.add(panel7);
-       frame.add(panel8);
+       frame.add(panelInDir);
+       frame.add(panelOutDir);
+       frame.add(panelFileCount);
+       frame.add(panelDirDepth);
+       frame.add(panelForceDir);
+       frame.add(panelCapitalization);
+       frame.add(panelNewSuffix);
+       frame.add(panelSuffixes);
+       frame.add(panelStart);
+       frame.add(panelNVCVersion);
 
        frame.pack();
        frame.setResizable(false);

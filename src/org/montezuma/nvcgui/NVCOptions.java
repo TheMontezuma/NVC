@@ -12,15 +12,18 @@ public class NVCOptions {
 	@Option(name="-o",usage="output directory, example: \"ATARI\"", metaVar="OUTPUT", required=true)
     public String to = "output";
 
-    @Option(name="-l",usage="output directory depth, example: 3", metaVar="DEPTH")
+    @Option(name="-l",usage="preferred output directory depth, example: 3", metaVar="DEPTH")
     public int level = 3;
+    
+    @Option(name="-n",usage="preferred number of files in output directories", metaVar="FILECOUNT")
+    public int filecount = 0;
 
-    @Option(name="-c",usage="capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized, example: 1", metaVar="CAP")
+    @Option(name="-c",usage="capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized, 4-Title Like, example: 1", metaVar="CAP")
     public int capitalization = 1;
     
     @Option(name="-f",usage="force directory creation for files with unique names")
     public boolean force = true;
 
-    @Argument(usage="list of suffixes, example: ATR XEX XFD", metaVar="suffix", required=true, multiValued=true)
+    @Argument(usage="list of suffixes, for example: ATR XEX XFD", metaVar="suffix", required=true, multiValued=true)
     public List<String> suffixes = new ArrayList<String>();
 }
