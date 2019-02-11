@@ -14,9 +14,10 @@ public class NVCPersistence {
 	private static final String theNodeName = "/org/montezuma/nvcgui";
 	private static final String FROM = "from";
 	private static final String TO = "to";
+	private static final String FILECOUNT = "filecount";
 	private static final String LEVEL = "level";
-	private static final String CAP = "capitalization";
 	private static final String FORCE = "force";
+	private static final String CAP = "capitalization";
 	private static final String SUFFIXES = "suffixes";
 	
 	static private NVCOptions op;
@@ -34,6 +35,7 @@ public class NVCPersistence {
 			Preferences prefs = Preferences.userRoot().node(theNodeName);
 			op.from = prefs.get(FROM, op.from);
 			op.to = prefs.get(TO, op.to);
+			op.filecount = prefs.getInt(FILECOUNT, op.filecount);
 			op.level = prefs.getInt(LEVEL, op.level);
 			op.capitalization = prefs.getInt(CAP, op.capitalization);
 			op.force = prefs.getBoolean(FORCE, op.force);
@@ -65,9 +67,10 @@ public class NVCPersistence {
 			Preferences prefs = Preferences.userRoot().node(theNodeName);
 			prefs.put(FROM, op.from);
 			prefs.put(TO, op.to);
+			prefs.putInt(FILECOUNT, op.filecount);
 			prefs.putInt(LEVEL, op.level);
-			prefs.putInt(CAP, op.capitalization);
 			prefs.putBoolean(FORCE, op.force);
+			prefs.putInt(CAP, op.capitalization);
 			try
 			{
 				ByteArrayOutputStream baos = new  ByteArrayOutputStream();

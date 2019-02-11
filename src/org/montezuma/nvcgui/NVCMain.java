@@ -10,14 +10,16 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 13;
+	final static int version = 14;
 	byte[] BUFFER1 = new byte[0xFFFFF];
 	byte[] BUFFER2 = new byte[0xFFFFF];
 	
 	NVCOptions op = new NVCOptions();
 	NVCGui gui;
 
-	LinkedList<NVCFileNamePair> files;
+	LinkedList<NVCFileNamePair> mFiles;
+	HashMap<String, Integer> mCountMap;
+	
 	File output_directory;
 	FileWriter content_writer;
 	String line_separator = System.getProperty("line.separator");
@@ -45,7 +47,13 @@ public class NVCMain {
 		    "LPT7",
 		    "LPT8",
 		    "LPT9"
- };
+    };
+
+	enum eCapState 
+	{
+		START,
+		IN_A_WORD
+	};
 
 	public static void main(String[] args) {
 		
@@ -64,7 +72,7 @@ public class NVCMain {
 		    catch( CmdLineException e ) 
 		    {
 		        System.err.println(e.getMessage());
-		        System.err.println("java -jar nvc.jar -i INPUT [-o OUTPUT -l LEVEL -c CAPITALIZATION -f] suffix1 [suffix2 ... suffixn]");
+		        System.err.println("java -jar nvc.jar -i INPUT [-o OUTPUT -l LEVEL -n FILECOUNT -c CAPITALIZATION -f] suffix1 [suffix2 ... suffixn]");
 		        parser.printUsage(System.err);
 		        return;
 		    }
@@ -82,13 +90,15 @@ public class NVCMain {
 			output_directory = new File(op.to);
 			output_directory.mkdirs();
 			content_writer = new FileWriter(op.to+"/content.txt");
-			files = new LinkedList<NVCFileNamePair>();
+			mFiles = new LinkedList<NVCFileNamePair>();
+			mCountMap = new HashMap<String, Integer>();
+			
 			if(gui == null)
 			{
 				System.err.println("Parsing input directories...");
 			}
 			getFileList(new File(op.from));
-			Collections.sort(files, new Comparator<NVCFileNamePair>() {
+			Collections.sort(mFiles, new Comparator<NVCFileNamePair>() {
 				public int compare(NVCFileNamePair p1, NVCFileNamePair p2) {
 					return p1.fileName.compareTo(p2.fileName);
 				}
@@ -97,19 +107,19 @@ public class NVCMain {
 			{
 				System.err.println("Copying files...");
 			}
-			ListIterator<NVCFileNamePair> it = files.listIterator();
+			ListIterator<NVCFileNamePair> it = mFiles.listIterator();
 			char last_char = 0;
 			int dup_counter = 1;
-			int file_count = files.size();
+			int file_count = mFiles.size();
 			int file_counter = 0;
-			
+
 			while (it.hasNext()) {
 				file_counter++;
 				NVCFileNamePair theFile = it.next();
-				String input_file_name = theFile.fileName;
+				String file_name = theFile.fileName;
 				
-				if (last_char != input_file_name.toUpperCase().charAt(0)) {
-					last_char = input_file_name.toUpperCase().charAt(0);
+				if (last_char != file_name.toUpperCase().charAt(0)) {
+					last_char = file_name.toUpperCase().charAt(0);
 					if(gui == null)
 					{
 						System.err.print(last_char); // progress tracking for command line
@@ -121,13 +131,43 @@ public class NVCMain {
 					// put all files which names don't start with a letter in the '#' directory 
 					output_path.append("/#");
 				}
+				
+				final int index_of_last_dot = file_name.lastIndexOf('.');
+				int max_val = Math.min(index_of_last_dot, op.level);
+				if(op.filecount!=0)
+				{
+					Integer fcount = Integer.MAX_VALUE;
+					int i = max_val;
+					while(i<=index_of_last_dot)
+					{
+						String key = file_name.substring(0, i);
+						if(mCountMap.containsKey(key))
+						{
+							fcount = mCountMap.get(key);
+						}
+						else
+						{
+							fcount = countFiles(key);
+							mCountMap.put(key, fcount);
+						}
+						if(fcount <= op.filecount)
+						{
+							max_val = i;
+							break;
+						}
+						i++;
+					}
+					if(i>index_of_last_dot)
+					{
+						max_val = index_of_last_dot;
+					}
+				}
+				
 				StringBuffer tmp = new StringBuffer();
-				final int last_index_of_dot = input_file_name.lastIndexOf('.');
-				final int max_val = Math.min(last_index_of_dot, op.level);
 				int i = 0;
 				while (i < max_val) {
 					do {
-						tmp.append(input_file_name.toUpperCase().charAt(i));
+						tmp.append(file_name.toUpperCase().charAt(i));
 						i++;
 					} while ((i < max_val) && hasUniqueNVC(tmp.toString()));
 					if(!(op.force) && isUnique(tmp.toString()))
@@ -154,7 +194,7 @@ public class NVCMain {
 				output_dir.mkdirs();
 				
 				File input_file = new File(theFile.filePath);
-				File output_file = new File(output_file_path + input_file_name);
+				File output_file = new File(output_file_path + file_name);
 				
 				if(output_file.exists())
 				{
@@ -166,12 +206,12 @@ public class NVCMain {
 					}
 					while(dup_counter_index > 1)
 					{
-						int ind_tmp = input_file_name.lastIndexOf('.');
+						int ind_tmp = file_name.lastIndexOf('.');
 						StringBuffer sb_tmp = new StringBuffer(output_file_path);
-						sb_tmp.append(input_file_name.substring(0,ind_tmp));
+						sb_tmp.append(file_name.substring(0,ind_tmp));
 						sb_tmp.append(" NVCVER");
 						sb_tmp.append(dup_counter_index);
-						sb_tmp.append(input_file_name.substring(ind_tmp));
+						sb_tmp.append(file_name.substring(ind_tmp));
 						output_file = new File( sb_tmp.toString() );
 						if( 0 == BinFileCompare(input_file, output_file) )
 						{
@@ -182,12 +222,12 @@ public class NVCMain {
 					}
 					if(create_file_with_NVCVER_suffix)
 					{
-						int ind_tmp = input_file_name.lastIndexOf('.');
+						int ind_tmp = file_name.lastIndexOf('.');
 						StringBuffer sb_tmp = new StringBuffer(output_file_path);
-						sb_tmp.append(input_file_name.substring(0,ind_tmp));
+						sb_tmp.append(file_name.substring(0,ind_tmp));
 						sb_tmp.append(" NVCVER");
 						sb_tmp.append(++dup_counter);
-						sb_tmp.append(input_file_name.substring(ind_tmp));
+						sb_tmp.append(file_name.substring(ind_tmp));
 						output_file = new File( sb_tmp.toString() );
 						output_file.createNewFile();
 						BinFileCopy(input_file, output_file);
@@ -234,10 +274,10 @@ public class NVCMain {
 	private boolean isUnique(String prefix)
 	{
 		int count=0;
-		ListIterator<NVCFileNamePair> iterator = files.listIterator();
+		ListIterator<NVCFileNamePair> iterator = mFiles.listIterator();
 		while ( iterator.hasNext() && count < 2)
 		{
-			String tmp = iterator.next().fileName;
+			String tmp = iterator.next().fileName.toUpperCase();
 			if(tmp.startsWith(prefix))
 			{
 				count++;
@@ -248,10 +288,9 @@ public class NVCMain {
 
 	private boolean hasUniqueNVC(String prefix) {
 		Collection<Character> nvc = new HashSet<Character>();
-
-		ListIterator<NVCFileNamePair> iterator = files.listIterator();
+		ListIterator<NVCFileNamePair> iterator = mFiles.listIterator();
 		while (iterator.hasNext()) {
-			String tmp = iterator.next().fileName;
+			String tmp = iterator.next().fileName.toUpperCase();
 			if (tmp.startsWith(prefix)) {
 				int prefix_length = prefix.length();
 				if (tmp.length() > prefix_length) {
@@ -271,16 +310,50 @@ public class NVCMain {
 					switch(op.capitalization)
 					{
 					case 0: // none
-						files.add(new NVCFileNamePair(f.getPath(), f.getName()));
+						mFiles.add(new NVCFileNamePair(f.getPath(), f.getName()));
 						break;
 					case 1: // UPPER CASE
-						files.add(new NVCFileNamePair(f.getPath(), f.getName().toUpperCase()));
+						mFiles.add(new NVCFileNamePair(f.getPath(), f.getName().toUpperCase()));
 						break;
 					case 2: // lower case
-						files.add(new NVCFileNamePair(f.getPath(), f.getName().toLowerCase()));
+						mFiles.add(new NVCFileNamePair(f.getPath(), f.getName().toLowerCase()));
 						break;
 					case 3: // Capitalized
-						files.add(new NVCFileNamePair(f.getPath(), Character.toUpperCase(f.getName().charAt(0)) + f.getName().substring(1).toLowerCase()));
+						mFiles.add(new NVCFileNamePair(f.getPath(), Character.toUpperCase(f.getName().charAt(0)) + f.getName().substring(1).toLowerCase()));
+						break;
+					case 4: // Title Like
+						{
+							eCapState state = eCapState.START;
+							
+							StringBuffer sb = new StringBuffer();
+							int title_length = f.getName().length();
+							for(int j=0 ; j<title_length ; j++)
+							{
+								char c = f.getName().charAt(j);
+								switch(state)
+								{
+									case START:
+										c = Character.toUpperCase(c);
+										if(Character.isLetter(c))
+										{
+											state = eCapState.IN_A_WORD;
+										}
+										break;
+									case IN_A_WORD:
+										c = Character.toLowerCase(c);
+										if(c!='\'' && c!='´' && !Character.isLetter(c))
+										{
+											state = eCapState.START;	
+										}
+										break;
+								}
+								sb.append(c);
+							}
+							
+							String file_name = sb.toString();
+							final int index_of_last_dot = file_name.lastIndexOf('.');
+							mFiles.add(new NVCFileNamePair(f.getPath(), file_name.substring(0, index_of_last_dot) + file_name.substring(index_of_last_dot).toLowerCase()));
+						}
 						break;
 					}
 					break;
@@ -298,6 +371,20 @@ public class NVCMain {
 			// skip the file or directory and continue
 		}
 	}
+	
+	private int countFiles(String prefix)
+	{
+		int count = 0;
+		for(NVCFileNamePair pair : mFiles)
+		{
+			if(pair.fileName.startsWith(prefix))
+			{
+				count++;	
+			}
+		}
+		return count;
+	}
+	
 
 	private void BinFileCopy(File inputFile, File outputFile) throws Exception {
 		FileInputStream in = new FileInputStream(inputFile);
