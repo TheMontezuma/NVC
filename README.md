@@ -29,6 +29,8 @@ NVC Usage
 
 Double click the nvc.jar file to start the tool. A new window will appear.
 
+![nvc](https://raw.githubusercontent.com/TheMontezuma/NVC/master/nvc.png "NVC Window")
+
 If started first time, the tool shows default settings, otherwise it shows the last used settings.
 
 Settings description:
