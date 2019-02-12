@@ -45,7 +45,7 @@ Settings description:
 
 Upon clicking on the Start button, the tool searches the Input directory (and all its subdirectories) for files matching given suffixes. It maintains a list containing search results, which is sorted alphabetically after the search is done. NVC follows that list to copy files to the Output directory.
 
-While copying files, NVC creates subdirectories according to the "Max output directory structure depth" and "Force directory creation at the specified depth" settings. If there are files with identical names found, their content will be compared. Identical content means only one copy in the Output directory. If the files are different, all will be copied and the name of every file that follows will be extended with NVCVERX, where X is a counter.
+While copying files, NVC creates subdirectories according to the settings. If there are files with identical names found, their content will be compared. Identical content means only one copy in the Output directory. If the files are different, all will be copied and the name of every file that follows will be extended with NVCVERX, where X is a counter.
 
 NVC Usage from a command line
 
