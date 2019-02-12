@@ -13,13 +13,13 @@ public class NVCOptions {
     public String to = "output";
 
     @Option(name="-l",usage="preferred output directory depth, example: 3", metaVar="DEPTH")
-    public int level = 3;
+    public int level = 1;
     
     @Option(name="-n",usage="preferred number of files in output directories", metaVar="FILECOUNT")
-    public int filecount = 0;
+    public int filecount = 100;
 
     @Option(name="-c",usage="capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized, 4-Title Like, example: 1", metaVar="CAP")
-    public int capitalization = 1;
+    public int capitalization = 0;
     
     @Option(name="-f",usage="force directory creation for files with unique names")
     public boolean force = false;
