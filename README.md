@@ -12,6 +12,8 @@ NVC takes advantage of a similar idea. Its goal is to copy files to the SD card 
 
 While copying the MOON PATROL (V1).XEX file, the tool will create directories M/MO/MOO, and copy the file to the MOO directory. The depth of nesting (whether M/MO is fine, or maybe M/MO/MOO/MOON would be better, etc.) is configurable.
 
+![nvc structure](https://raw.githubusercontent.com/TheMontezuma/NVC/master/nvc_structure.png "NVC Structure")
+
 If an SD card is empty and we are going to use NVC to populate it with games, then we get an additional bonus:
 - NVC will copy files in alphabetical order, so SIO2SD will display them accordingly
 - NVC will create a list of all copied files (in the content.txt file, which will be automatically created) 
@@ -48,13 +50,14 @@ NVC Usage from a command line
 
 NVC can be started alternatively from a command line.
 
-java -jar nvc.jar -i INPUT -o OUTPUT [-f -l LEVEL -c CAPITALIZATION] suffix1 [suffix2 ... suffixn]
+java -jar nvc.jar -i INPUT [-o OUTPUT -l LEVEL -n FILECOUNT -c CAPITALIZATION -f] suffix1 [suffix2 ... suffixn]
+ -i INPUT  : input directory, example: "input"
+ -o OUTPUT : output directory, for example: "ATARI"
+ -l LEVEL  : output directory depth, default: 1
+ -n FILECOUNT : number of files in output directories, default: 100 (0 = no limit)
+ -c CAPITALIZATION : 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized, 4-Like In A Title, default: none
  -f        : force directory creation for files with unique names, default: false
- -i INPUT  : input directory
- -l DEPTH  : output directory depth, default: 3
- -c CAPITALIZATION : output file name capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized
- -o OUTPUT : output directory
- suffix    : list of suffixes, example: atr com xex xfd
+  suffix    : list of suffixes, example: atr com xex xfd
 
 Examples:
 
@@ -62,13 +65,13 @@ Examples:
 
 performs the same action as double-clicking the nvc.jar (you may need it if double-clicking the nvc.jar does not work in your java environment)
 
-    java -jar nvc.jar -i input_dir -o output_dir -l 2 atr
+    java -jar nvc.jar -i input_dir -o output_dir -n 0 -l 2 atr
 
 search "input_dir" and its subdirectories for files matching "atr" suffix and copy them to "output_dir", while creating a directory structure with up to 2 levels of subdirectories
 
-    java -jar nvc.jar -i C:\ -o d:\ATARI -f -l 3 atr xfd xex
+    java -jar nvc.jar -i C:\ -o d:\ATARI -f -n 100 -l 1 atr xfd xex
 
-search the complete "C" drive for files with "atr", "xfd" and "xex" suffixes and copy them to the "ATARI" directory on the "D" drive, while creating a directory structure with exactly 3 levels of subdirectories
+search the complete "C" drive for files with "atr", "xfd" and "xex" suffixes and copy them to the "ATARI" directory on the "D" drive, while creating a directory structure with up to 100 items in a folder and at least 1 level of subdirectories
 
 Remarks
 - copying files takes time - a progress bar will tell you how many files (in percent) are already copied
