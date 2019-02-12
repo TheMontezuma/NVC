@@ -10,7 +10,7 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 14;
+	final static int version = 15;
 	byte[] BUFFER1 = new byte[0xFFFFF];
 	byte[] BUFFER2 = new byte[0xFFFFF];
 	
@@ -341,7 +341,7 @@ public class NVCMain {
 										break;
 									case IN_A_WORD:
 										c = Character.toLowerCase(c);
-										if(c!='\'' && c!='´' && !Character.isLetter(c))
+										if(c!='\'' && c!='Â´' && !Character.isLetter(c))
 										{
 											state = eCapState.START;	
 										}
