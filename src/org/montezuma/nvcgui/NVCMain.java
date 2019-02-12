@@ -341,7 +341,7 @@ public class NVCMain {
 										break;
 									case IN_A_WORD:
 										c = Character.toLowerCase(c);
-										if(c!='\'' && c!='´' && !Character.isLetter(c))
+										if(c!='\'' && !Character.isLetter(c))
 										{
 											state = eCapState.START;	
 										}
