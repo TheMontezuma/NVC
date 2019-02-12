@@ -12,7 +12,7 @@ NVC takes advantage of a similar idea. Its goal is to copy files to the SD card 
 
 While copying the MOON PATROL (V1).XEX file, the tool will create directories M/MO/MOO, and copy the file to the MOO directory. The depth of nesting (whether M/MO is fine, or maybe M/MO/MOO/MOON would be better, etc.) is configurable.
 
-![nvc structure](https://raw.githubusercontent.com/TheMontezuma/NVC/master/nvc_structure.png "NVC Structure")
+![nvc structure](https://raw.githubusercontent.com/TheMontezuma/NVC/master/nvc_structure.jpg "NVC Structure")
 
 If an SD card is empty and we are going to use NVC to populate it with games, then we get an additional bonus:
 - NVC will copy files in alphabetical order, so SIO2SD will display them accordingly
