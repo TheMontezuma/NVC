@@ -10,7 +10,7 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 15;
+	final static int version = 16;
 	byte[] BUFFER1 = new byte[0xFFFFF];
 	byte[] BUFFER2 = new byte[0xFFFFF];
 	
@@ -131,6 +131,18 @@ public class NVCMain {
 					// put all files which names don't start with a letter in the '#' directory 
 					output_path.append("/#");
 				}
+
+				if(op.short_file_names)
+				{
+					int liold = file_name.lastIndexOf('.');
+					String name = file_name.substring(0,liold);
+					String suffix = file_name.substring(liold+1);
+					name = name.replaceAll("[^a-zA-Z0-9]", "");
+					// the user knows what suffix he wants, so we only trim it
+					file_name = name.substring(0,Math.min(8,name.length())) 
+								+ "." 
+								+ suffix.substring(0,Math.min(3,suffix.length()));
+				}
 				
 				final int index_of_last_dot = file_name.lastIndexOf('.');
 				int max_val = Math.min(index_of_last_dot, op.level);
@@ -202,17 +214,15 @@ public class NVCMain {
 					int dup_counter_index = dup_counter;
 					if( 0 != BinFileCompare(input_file, output_file) )
 					{
+						// files with the same names have different content
 						create_file_with_NVCVER_suffix = true;
 					}
+					
+					// check if any existing file with the same name has identical content and if yes -> skip current file
 					while(dup_counter_index > 1)
 					{
-						int ind_tmp = file_name.lastIndexOf('.');
-						StringBuffer sb_tmp = new StringBuffer(output_file_path);
-						sb_tmp.append(file_name.substring(0,ind_tmp));
-						sb_tmp.append(" NVCVER");
-						sb_tmp.append(dup_counter_index);
-						sb_tmp.append(file_name.substring(ind_tmp));
-						output_file = new File( sb_tmp.toString() );
+						String n = generateFileName(output_file_path, file_name, dup_counter_index);
+						output_file = new File(n);
 						if( 0 == BinFileCompare(input_file, output_file) )
 						{
 							create_file_with_NVCVER_suffix = false;
@@ -220,15 +230,17 @@ public class NVCMain {
 						}
 						dup_counter_index--;
 					}
+					
 					if(create_file_with_NVCVER_suffix)
 					{
-						int ind_tmp = file_name.lastIndexOf('.');
-						StringBuffer sb_tmp = new StringBuffer(output_file_path);
-						sb_tmp.append(file_name.substring(0,ind_tmp));
-						sb_tmp.append(" NVCVER");
-						sb_tmp.append(++dup_counter);
-						sb_tmp.append(file_name.substring(ind_tmp));
-						output_file = new File( sb_tmp.toString() );
+						// generated file name may be identical to the name of an existing file :( 
+						do
+						{
+							String n = generateFileName(output_file_path, file_name, ++dup_counter);
+							output_file = new File(n);
+						}
+						while(output_file.exists());
+						
 						output_file.createNewFile();
 						BinFileCopy(input_file, output_file);
 					}
@@ -269,6 +281,26 @@ public class NVCMain {
 			System.err.println(line_separator+e);
 			System.exit(-1);
 		}
+	}
+	
+	private String generateFileName(String output_file_path, String file_name, int index)
+	{
+		int ind_tmp = file_name.lastIndexOf('.');
+		StringBuffer sb_tmp = new StringBuffer(output_file_path);
+		if(op.short_file_names)
+		{
+			String index_str = String.valueOf(index);
+			sb_tmp.append(file_name.substring(0,ind_tmp-index_str.length()));
+			sb_tmp.append(index_str);
+		}
+		else
+		{	
+			sb_tmp.append(file_name.substring(0,ind_tmp));
+			sb_tmp.append(" NVCVER");
+			sb_tmp.append(index);
+		}
+		sb_tmp.append(file_name.substring(ind_tmp));
+		return sb_tmp.toString();
 	}
 
 	private boolean isUnique(String prefix)

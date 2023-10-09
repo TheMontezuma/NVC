@@ -41,6 +41,7 @@ Settings description:
 - Preferred number of files in output directories - if a non-zero value is entered, the tool will dynamically adjust the directory structure depth to fulfill this limit (in this case "preferred output directory structure depth" is used as a minimum depth)
 - Preferred output directory structure depth - this value has an influence on the number of directories created in the destination path for a given file. The bigger it is, the smaller is the number of files in the last directory, but also the path that we need to follow to a file is longer. The default value is 1. For bigger game collections you may try higher numbers.
 - Force directory creation at the specified depth - default is off. If we have a file with a unique beginning of the name (there is no other file, which name starts with the same letters), then we don't have to create directories for it. SIO2SD does not sort files and does not display directories at the front of the files (like PCs do). You may want to enable it if you use NVC to organize your games for usage with a PC (for example with RespeQt or with Atari Emulator).
+- Trim the file names to 8.3 format
 - Suffix list - NVC will copy only the files with suffixes specified here (lowercase / uppercase does not matter) 
 
 Upon clicking on the Start button, the tool searches the Input directory (and all its subdirectories) for files matching given suffixes. It maintains a list containing search results, which is sorted alphabetically after the search is done. NVC follows that list to copy files to the Output directory.
@@ -57,6 +58,7 @@ NVC can be started alternatively from a command line.
      -n FILECOUNT : number of files in output directories, default: 100 (0 = no limit)
      -l DEPTH  : output directory depth, default: 3
      -f        : force directory creation for files with unique names, default: false
+     -s        : trim file names to 8.3
      -c CAPITALIZATION : output file name capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized
      suffix    : list of suffixes, example: atr com xex xfd
 

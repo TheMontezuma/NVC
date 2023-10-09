@@ -17,6 +17,7 @@ public class NVCPersistence {
 	private static final String FILECOUNT = "filecount";
 	private static final String LEVEL = "level";
 	private static final String FORCE = "force";
+	private static final String SHORT_FILE_NAMES = "short_file_names";
 	private static final String CAP = "capitalization";
 	private static final String SUFFIXES = "suffixes";
 	
@@ -39,6 +40,7 @@ public class NVCPersistence {
 			op.level = prefs.getInt(LEVEL, op.level);
 			op.capitalization = prefs.getInt(CAP, op.capitalization);
 			op.force = prefs.getBoolean(FORCE, op.force);
+			op.short_file_names = prefs.getBoolean(SHORT_FILE_NAMES, op.short_file_names);
 			byte[] bytes = prefs.getByteArray(SUFFIXES, null);
 			if (bytes != null)
 			{
@@ -70,6 +72,7 @@ public class NVCPersistence {
 			prefs.putInt(FILECOUNT, op.filecount);
 			prefs.putInt(LEVEL, op.level);
 			prefs.putBoolean(FORCE, op.force);
+			prefs.putBoolean(SHORT_FILE_NAMES, op.short_file_names);
 			prefs.putInt(CAP, op.capitalization);
 			try
 			{

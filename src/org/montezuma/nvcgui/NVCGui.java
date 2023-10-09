@@ -24,6 +24,7 @@ public class NVCGui implements	Runnable,
 	private JPanel panelDirDepth;
 	private JPanel panelCapitalization;
 	private JPanel panelForceDir;
+	private JPanel panelShortFileNames;
 	private JPanel panelNewSuffix;
 	private JPanel panelSuffixes;
 	private JPanel panelStart;
@@ -41,6 +42,7 @@ public class NVCGui implements	Runnable,
 	private JButton reset_suffix_list;
 	private JButton start;
 	private JCheckBox force;
+	private JCheckBox short_file_names;
 	private ProgressMonitor progressMonitor;
 	private NVCWorker nvcworker;
 	
@@ -70,6 +72,7 @@ public class NVCGui implements	Runnable,
        panelDirDepth = new JPanel();
        panelCapitalization = new JPanel();
        panelForceDir = new JPanel();
+       panelShortFileNames = new JPanel();
        panelNewSuffix = new JPanel();
        panelSuffixes = new JPanel();
        panelStart = new JPanel();
@@ -171,6 +174,12 @@ public class NVCGui implements	Runnable,
 			nvc.op.force = (ItemEvent.SELECTED == e.getStateChange());
 		} } );
        
+       short_file_names = new JCheckBox("Trim file names to 8.3", nvc.op.short_file_names);
+       short_file_names.addItemListener(new ItemListener() {
+		public void itemStateChanged(ItemEvent e) {
+			nvc.op.short_file_names = (ItemEvent.SELECTED == e.getStateChange());
+		} } );
+       
        suffix = new JTextField(3);
        suffix.addActionListener(new ActionListener() {
 		
@@ -249,6 +258,7 @@ public class NVCGui implements	Runnable,
        ((FlowLayout)panelDirDepth.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelCapitalization.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelForceDir.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelShortFileNames.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelNewSuffix.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelSuffixes.getLayout()).setAlignment(FlowLayout.LEADING);
        ((FlowLayout)panelNVCVersion.getLayout()).setAlignment(FlowLayout.TRAILING);
@@ -268,6 +278,7 @@ public class NVCGui implements	Runnable,
        panelCapitalization.add(new JLabel("Output file names capitalization:"));
        panelCapitalization.add(file_name_capitalization);
        panelForceDir.add(force);
+       panelShortFileNames.add(short_file_names);
        panelNewSuffix.add(new JLabel("New Suffix: "));
        panelNewSuffix.add(suffix);
        panelNewSuffix.add(add_new_suffix);
@@ -282,13 +293,14 @@ public class NVCGui implements	Runnable,
        suffix_list.setText(sb.toString());
        panelSuffixes.add(suffix_list);
        panelStart.add(start);
-       panelNVCVersion.add(new JLabel("Ver." + NVCMain.version + "   Montezuma 2011-2019"));
+       panelNVCVersion.add(new JLabel("Ver." + NVCMain.version + "   Montezuma 2011-2023"));
        
        frame.add(panelInDir);
        frame.add(panelOutDir);
        frame.add(panelFileCount);
        frame.add(panelDirDepth);
        frame.add(panelForceDir);
+       frame.add(panelShortFileNames);
        frame.add(panelCapitalization);
        frame.add(panelNewSuffix);
        frame.add(panelSuffixes);

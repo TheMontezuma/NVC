@@ -24,6 +24,9 @@ public class NVCOptions {
     @Option(name="-f",usage="force directory creation for files with unique names")
     public boolean force = false;
 
+    @Option(name="-s",usage="trim file names to 8.3")
+    public boolean short_file_names = false;
+    
     @Argument(usage="list of suffixes, for example: ATR XEX XFD", metaVar="suffix", required=true, multiValued=true)
     public List<String> suffixes = new ArrayList<String>();
 }
