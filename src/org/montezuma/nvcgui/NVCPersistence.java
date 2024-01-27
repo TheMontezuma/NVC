@@ -18,7 +18,8 @@ public class NVCPersistence {
 	private static final String LEVEL = "level";
 	private static final String FORCE = "force";
 	private static final String SHORT_FILE_NAMES = "short_file_names";
-	private static final String CAP = "capitalization";
+	private static final String CAPITALIZATION = "capitalization";
+	private static final String DIR_CAPITALIZATION = "dir_capitalization";
 	private static final String SUFFIXES = "suffixes";
 	
 	static private NVCOptions op;
@@ -38,7 +39,8 @@ public class NVCPersistence {
 			op.to = prefs.get(TO, op.to);
 			op.filecount = prefs.getInt(FILECOUNT, op.filecount);
 			op.level = prefs.getInt(LEVEL, op.level);
-			op.capitalization = prefs.getInt(CAP, op.capitalization);
+			op.capitalization = prefs.getInt(CAPITALIZATION, op.capitalization);
+			op.dir_capitalization = prefs.getInt(DIR_CAPITALIZATION, op.dir_capitalization);
 			op.force = prefs.getBoolean(FORCE, op.force);
 			op.short_file_names = prefs.getBoolean(SHORT_FILE_NAMES, op.short_file_names);
 			byte[] bytes = prefs.getByteArray(SUFFIXES, null);
@@ -73,7 +75,8 @@ public class NVCPersistence {
 			prefs.putInt(LEVEL, op.level);
 			prefs.putBoolean(FORCE, op.force);
 			prefs.putBoolean(SHORT_FILE_NAMES, op.short_file_names);
-			prefs.putInt(CAP, op.capitalization);
+			prefs.putInt(CAPITALIZATION, op.capitalization);
+			prefs.putInt(DIR_CAPITALIZATION, op.dir_capitalization);
 			try
 			{
 				ByteArrayOutputStream baos = new  ByteArrayOutputStream();

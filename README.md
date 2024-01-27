@@ -36,31 +36,35 @@ Double click the nvc.jar file to start the tool. A new window will appear.
 If started first time, the tool shows default settings, otherwise it shows the last used settings.
 
 Settings description:
-- Input directory - this is where we are copying from - it can be any directory, or even an entire drive (for example C:\)
-- Output directory - the destination - it should be the "ATARI" directory on the SD card
-- Preferred number of files in output directories - if a non-zero value is entered, the tool will dynamically adjust the directory structure depth to fulfill this limit (in this case "preferred output directory structure depth" is used as a minimum depth)
-- Preferred output directory structure depth - this value has an influence on the number of directories created in the destination path for a given file. The bigger it is, the smaller is the number of files in the last directory, but also the path that we need to follow to a file is longer. The default value is 1. For bigger game collections you may try higher numbers.
-- Force directory creation at the specified depth - default is off. If we have a file with a unique beginning of the name (there is no other file, which name starts with the same letters), then we don't have to create directories for it. SIO2SD does not sort files and does not display directories at the front of the files (like PCs do). You may want to enable it if you use NVC to organize your games for usage with a PC (for example with RespeQt or with Atari Emulator).
-- Trim the file names to 8.3 format
-- Suffix list - NVC will copy only the files with suffixes specified here (lowercase / uppercase does not matter) 
+- **Input directory** - this is where we are copying from - it can be any directory, or even an entire drive (for example C:\)
+- **Output directory** - the destination - it should be the "ATARI" directory on the SD card
+- **Preferred number of files in output directories** - if a non-zero value is entered, the tool will dynamically adjust the directory structure depth to fulfill this limit (in this case "preferred output directory structure depth" is used as a minimum depth)
+- **Preferred output directory structure depth** - this value has an influence on the number of directories created in the destination path for a given file. The bigger it is, the smaller is the number of files in the last directory, but also the path that we need to follow to a file is longer. The default value is 1. For bigger game collections you may try higher numbers.
+- **Force directory creation** at the specified depth - default is off. If we have a file with a unique beginning of the name (there is no other file, which name starts with the same letters), then we don't have to create directories for it. SIO2SD does not sort files and does not display directories at the front of the files (like PCs do). You may want to enable it if you use NVC to organize your games for usage with a PC (for example with RespeQt or with Atari Emulator).
+- **(Directory) Capitalization** - files and directory names in the output folder will apply to these settings 
+- **Trim** the file names to 8.3 format
+- **Suffix list** - NVC will copy only the files with suffixes specified here (lowercase / uppercase does not matter) 
 
 Upon clicking on the Start button, the tool searches the Input directory (and all its subdirectories) for files matching given suffixes. It maintains a list containing search results, which is sorted alphabetically after the search is done. NVC follows that list to copy files to the Output directory.
 
-While copying files, NVC creates subdirectories according to the settings. If there are files with identical names found, their content will be compared. Identical content means only one copy in the Output directory. If the files are different, all will be copied and the name of every file that follows will be extended with NVCVERX, where X is a counter.
+While copying files, NVC creates subdirectories according to the settings. If there are files with identical names found, their content will be compared. Identical content means only one copy in the Output directory. If the files are different, all will be copied and the name of every file that follows will be extended with **NVCVERX**, where X is a counter.
 
 NVC Usage from a command line
 
 NVC can be started alternatively from a command line.
 
-    java -jar nvc.jar -i INPUT [-o OUTPUT -n FILECOUNT -l LEVEL -c CAPITALIZATION -f] suffix1 [suffix2 ... suffixn]
-     -i INPUT  : input directory
-     -o OUTPUT : output directory
-     -n FILECOUNT : number of files in output directories, default: 100 (0 = no limit)
-     -l DEPTH  : output directory depth, default: 3
-     -f        : force directory creation for files with unique names, default: false
-     -s        : trim file names to 8.3
-     -c CAPITALIZATION : output file name capitalization: 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized
-     suffix    : list of suffixes, example: atr com xex xfd
+    java -jar nvc.jar -i INPUT [-o OUTPUT -l LEVEL -n FILECOUNT -c CAPITALIZATION -d DIR_CAPITALIZATION -f -s] suffix1 [suffix2 ... suffixn]
+     suffix                : list of suffixes, example: ATR XEX XFD
+     -c CAPITALIZATION     : 0-none, 1-UPPER CASE, 2-lower case, 3-Capitalized,
+                             4-Title Like, example: 1
+     -d DIR_CAPITALIZATION : 0-UPPER CASE, 1-lower case, example: 0
+     -f                    : force directory creation for files with unique names
+     -i INPUT              : input directory, example: "input"
+     -l LEVEL              : preferred output directory depth, example: 3
+     -n FILECOUNT          : preferred number of files in output directories,
+                             example: 100
+     -o OUTPUT             : output directory, example: "ATARI"
+     -s                    : trim file names to 8.3
 
 Examples:
 

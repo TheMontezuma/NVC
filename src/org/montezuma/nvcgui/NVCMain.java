@@ -10,7 +10,7 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 16;
+	final static int version = 17;
 	byte[] BUFFER1 = new byte[0xFFFFF];
 	byte[] BUFFER2 = new byte[0xFFFFF];
 	
@@ -72,7 +72,7 @@ public class NVCMain {
 		    catch( CmdLineException e ) 
 		    {
 		        System.err.println(e.getMessage());
-		        System.err.println("java -jar nvc.jar -i INPUT [-o OUTPUT -l LEVEL -n FILECOUNT -c CAPITALIZATION -f] suffix1 [suffix2 ... suffixn]");
+		        System.err.println("java -jar nvc.jar -i INPUT [-o OUTPUT -l LEVEL -n FILECOUNT -c CAPITALIZATION -d DIR_CAPITALIZATION -f -s] suffix1 [suffix2 ... suffixn]");
 		        parser.printUsage(System.err);
 		        return;
 		    }
@@ -179,7 +179,14 @@ public class NVCMain {
 				int i = 0;
 				while (i < max_val) {
 					do {
-						tmp.append(file_name.toUpperCase().charAt(i));
+						if(op.dir_capitalization == 0) // UPPER CASE
+						{
+							tmp.append(file_name.toUpperCase().charAt(i));
+						}
+						else
+						{
+							tmp.append(file_name.toLowerCase().charAt(i));
+						}
 						i++;
 					} while ((i < max_val) && hasUniqueNVC(tmp.toString()));
 					if(!(op.force) && isUnique(tmp.toString()))
@@ -310,7 +317,7 @@ public class NVCMain {
 		while ( iterator.hasNext() && count < 2)
 		{
 			String tmp = iterator.next().fileName.toUpperCase();
-			if(tmp.startsWith(prefix))
+			if(tmp.startsWith(prefix.toUpperCase()))
 			{
 				count++;
 			}
@@ -323,7 +330,7 @@ public class NVCMain {
 		ListIterator<NVCFileNamePair> iterator = mFiles.listIterator();
 		while (iterator.hasNext()) {
 			String tmp = iterator.next().fileName.toUpperCase();
-			if (tmp.startsWith(prefix)) {
+			if (tmp.startsWith(prefix.toUpperCase())) {
 				int prefix_length = prefix.length();
 				if (tmp.length() > prefix_length) {
 					nvc.add(tmp.charAt(prefix_length));

@@ -23,6 +23,7 @@ public class NVCGui implements	Runnable,
 	private JPanel panelFileCount;
 	private JPanel panelDirDepth;
 	private JPanel panelCapitalization;
+	private JPanel panelDirCapitalization;
 	private JPanel panelForceDir;
 	private JPanel panelShortFileNames;
 	private JPanel panelNewSuffix;
@@ -34,6 +35,7 @@ public class NVCGui implements	Runnable,
 	private JTextField output_directory_file_count;
 	private JComboBox<Integer> output_directory_depth;
 	private JComboBox<String> file_name_capitalization;
+	private JComboBox<String> dir_name_capitalization;
 	private JTextField suffix;
 	private JLabel suffix_list;
 	private JButton browse_for_input_directory;
@@ -71,6 +73,7 @@ public class NVCGui implements	Runnable,
        panelFileCount = new JPanel();
        panelDirDepth = new JPanel();
        panelCapitalization = new JPanel();
+       panelDirCapitalization = new JPanel();
        panelForceDir = new JPanel();
        panelShortFileNames = new JPanel();
        panelNewSuffix = new JPanel();
@@ -166,7 +169,15 @@ public class NVCGui implements	Runnable,
 		public void actionPerformed(ActionEvent e) {
 			nvc.op.capitalization = file_name_capitalization.getSelectedIndex();
 		} } );
-
+       
+       dir_name_capitalization = new JComboBox<String>();
+       dir_name_capitalization.addItem("UPPER CASE");
+       dir_name_capitalization.addItem("lower case");
+       dir_name_capitalization.setSelectedIndex(nvc.op.dir_capitalization);
+       dir_name_capitalization.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			nvc.op.dir_capitalization = dir_name_capitalization.getSelectedIndex();
+		} } );
        
        force = new JCheckBox("Force directory creation for files with unique names", nvc.op.force);
        force.addItemListener(new ItemListener() {
@@ -257,6 +268,7 @@ public class NVCGui implements	Runnable,
        ((FlowLayout)panelFileCount.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelDirDepth.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelCapitalization.getLayout()).setAlignment(FlowLayout.TRAILING);
+       ((FlowLayout)panelDirCapitalization.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelForceDir.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelShortFileNames.getLayout()).setAlignment(FlowLayout.TRAILING);
        ((FlowLayout)panelNewSuffix.getLayout()).setAlignment(FlowLayout.TRAILING);
@@ -277,6 +289,8 @@ public class NVCGui implements	Runnable,
        panelDirDepth.add(output_directory_depth);
        panelCapitalization.add(new JLabel("Output file names capitalization:"));
        panelCapitalization.add(file_name_capitalization);
+       panelDirCapitalization.add(new JLabel("Output directory capitalization:"));
+       panelDirCapitalization.add(dir_name_capitalization);
        panelForceDir.add(force);
        panelShortFileNames.add(short_file_names);
        panelNewSuffix.add(new JLabel("New Suffix: "));
@@ -293,7 +307,7 @@ public class NVCGui implements	Runnable,
        suffix_list.setText(sb.toString());
        panelSuffixes.add(suffix_list);
        panelStart.add(start);
-       panelNVCVersion.add(new JLabel("Ver." + NVCMain.version + "   Montezuma 2011-2023"));
+       panelNVCVersion.add(new JLabel("Ver." + NVCMain.version + "   Montezuma 2011-2024"));
        
        frame.add(panelInDir);
        frame.add(panelOutDir);
@@ -302,6 +316,7 @@ public class NVCGui implements	Runnable,
        frame.add(panelForceDir);
        frame.add(panelShortFileNames);
        frame.add(panelCapitalization);
+       frame.add(panelDirCapitalization);
        frame.add(panelNewSuffix);
        frame.add(panelSuffixes);
        frame.add(panelStart);
