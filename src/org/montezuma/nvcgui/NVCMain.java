@@ -10,7 +10,7 @@ import java.io.*;
 
 public class NVCMain {
 	
-	final static int version = 17;
+	final static int version = 18;
 	byte[] BUFFER1 = new byte[0xFFFFF];
 	byte[] BUFFER2 = new byte[0xFFFFF];
 	
@@ -414,9 +414,10 @@ public class NVCMain {
 	private int countFiles(String prefix)
 	{
 		int count = 0;
+		String PREFIX = prefix.toUpperCase();
 		for(NVCFileNamePair pair : mFiles)
 		{
-			if(pair.fileName.startsWith(prefix))
+			if(pair.fileName.toUpperCase().startsWith(PREFIX))
 			{
 				count++;	
 			}
